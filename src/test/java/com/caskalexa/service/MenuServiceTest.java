@@ -1,52 +1,61 @@
 package com.caskalexa.service;
 
-import com.caskalexa.RestTemplateConfig;
+import com.caskalexa.service.dto.Beer;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = { MenuService.class, RestTemplateConfig.class })
+@RunWith(MockitoJUnitRunner.class)
 public class MenuServiceTest {
 
-    @Autowired
-    MenuService menuService;
+    public static final String CASK_MENU_PDF = "src/test/resources/cask-menu.pdf";
 
-    @Autowired
-    RestTemplate restTemplate;
+    @InjectMocks
+    MenuService menuService = new MenuService();
 
-    private MockRestServiceServer server;
+    @Mock
+    GoogleVisionService googleVisionService;
+
+    @Mock
+    MenuDownloaderService menuDownloaderService;
+
+    static byte[] pdfData;
+
+    @BeforeClass
+    public static void beforeClass() throws IOException {
+        pdfData = Files.readAllBytes(Paths.get(CASK_MENU_PDF));
+    }
 
     @Before
-    public void setup() {
-        server = MockRestServiceServer.createServer(restTemplate);
+    public void reset() {
+        Mockito.reset(googleVisionService, menuDownloaderService);
     }
 
     @Test
-    public void testDownloadPdf() throws Exception {
+    public void testKegsExtracted() throws Exception {
+        String extractedText = Files.readAllLines(Paths.get("src/test/resources/extract-text.txt"))
+                .stream()
+                .collect(Collectors.joining("\n"));
 
-        byte[] data = Files.readAllBytes(Paths.get("src/test/resources/cask-menu.pdf"));
+        when(menuDownloaderService.getMenu()).thenReturn(pdfData);
+        when(googleVisionService.getText(any())).thenReturn(extractedText);
 
-        server.expect(requestTo(MenuService.MENU_PDF_URL))
-                .andExpect(method(GET))
-                .andRespond(withSuccess(data, MediaType.APPLICATION_PDF));
-
-        byte[] responseData = menuService.getMenu();
-        assertThat(responseData).isEqualTo(data);
+        List<Beer> allKegs = menuService.getAllKegs();
+        assertThat(allKegs).hasSize(15);
     }
 }

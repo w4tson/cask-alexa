@@ -1,21 +1,43 @@
 package com.caskalexa.service;
 
+import com.caskalexa.service.dto.Beer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class MenuService {
 
-    public static final String MENU_PDF_URL = "http://www.caskpubandkitchen.com/s/Todays-Beerlist.pdf";
+    @Autowired
+    MenuDownloaderService menuDownloaderService;
 
     @Autowired
-    RestTemplate restTemplate;
+    GoogleVisionService googleVisionService;
 
-    public byte[] getMenu() {
-        ResponseEntity<byte[]> response = restTemplate.getForEntity(MENU_PDF_URL, byte[].class);
-        return response.getBody();
+    public List<Beer> getAllKegs() throws IOException {
+        byte[] menuPdfBytes = menuDownloaderService.getMenu();
+        byte[] kegsPdfBytes = PdfSupport.cropKegs(menuPdfBytes);
+        byte[] imageOfKegs = PdfSupport.convertPdfToImage(kegsPdfBytes);
+        String extractedText = googleVisionService.getText(imageOfKegs);
+        return convertExtractedKegText(extractedText);
     }
+
+    private List<Beer> convertExtractedKegText(String text) {
+        String beers = text.split("KEG\n")[1];
+
+        String[] lines = beers.split("\n");
+        int numberOfKegs = (lines.length)/ 2;
+
+        return IntStream.range(0, numberOfKegs)
+                .mapToObj(i -> {
+                    return  new Beer("Keg", lines[i * 2], lines[i * 2 + 1]);
+                })
+                .collect(Collectors.toList());
+    }
+
 
 }
