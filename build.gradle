@@ -60,8 +60,11 @@ dependencies {
     testRuntime 'com.h2database:h2'
 }
 
+def creds = "/Users/paulwatson/.google-creds/cask-alexa-38eaa2209188.json";
+
 bootRun {
     addResources = true
+    jvmArgs = ["-DGOOGLE_APPLICATION_CREDENTIALS=$creds"]
 }
 
 springBoot  {
@@ -76,8 +79,9 @@ idea {
     }
 }
 
+
 test {
-    environment "GOOGLE_APPLICATION_CREDENTIALS", "/Users/paulwatson/.google-creds/cask-alexa-38eaa2209188.json"
+    environment "GOOGLE_APPLICATION_CREDENTIALS", creds
 }
 
 
