@@ -18,9 +18,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -64,9 +66,11 @@ public class MenuDownloaderServiceTest {
 
     @Test
     public void testDownloadPdf() throws Exception {
+        HttpHeaders headers  = new HttpHeaders();
+        headers.add("ETag", "123");
         server.expect(requestTo(MenuDownloaderService.MENU_PDF_URL))
                 .andExpect(method(GET))
-                .andRespond(withSuccess(pdfData, MediaType.APPLICATION_PDF));
+                .andRespond(withSuccess(pdfData, MediaType.APPLICATION_PDF).headers(headers));
 
         byte[] responseData = menuDownloaderService.getMenu();
         assertThat(responseData).isEqualTo(pdfData);
@@ -77,5 +81,7 @@ public class MenuDownloaderServiceTest {
         menuDownloaderService.parsePdfData(pdfData);
 
     }
+
+
 
 }

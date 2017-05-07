@@ -42,6 +42,7 @@ public class MenuDownloaderService {
         List<String> eTags = response.getHeaders().get("ETag");
         if (isNotEmpty(eTags) && eTags.size() > 0 ) {
             lastEtag = eTags.get(0);
+            log.info(format("Menu downloaded, ETag: %s", lastEtag));
         }
         return response.getBody();
     }
