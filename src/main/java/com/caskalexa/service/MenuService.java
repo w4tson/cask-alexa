@@ -39,6 +39,7 @@ public class MenuService {
             byte[] imageOfKegs = PdfSupport.convertPdfToImage(kegsPdfBytes);
             String extractedText = googleVisionService.getText(imageOfKegs);
             beers = convertExtractedKegText(extractedText);
+            cachedBeers = beers;
         }
 
         return beers;
