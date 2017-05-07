@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/cask-alexa.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -Dgoogle_creds="$google_creds" -jar build/libs/cask-alexa.jar

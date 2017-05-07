@@ -1,10 +1,8 @@
 package com.caskalexa;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +11,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.lang.String.format;
-import static org.apache.http.util.TextUtils.isBlank;
 
 @Slf4j
 public class GoogleCredentialsSupport {
@@ -23,13 +20,13 @@ public class GoogleCredentialsSupport {
 
     /**
      * If ENV var 'google_creds' is set then that is the content of the credentials needed
-     * else if GOOGLE_APPLICATION_CREDENTIALS system property is set then that is the location to file that contains the credential
+     *
      *
      * This method reads the content of both and places them in a new temporary file, then points to the
      */
     public static void configure() {
-        String credential = getContentFromEnvProperty()
-                .orElseGet(GoogleCredentialsSupport::getContentFromSystemProperty);
+        String credential = getContentFromJavaSystemProperty()
+                .orElseThrow(() -> new RuntimeException("No Envrionment variable 'google_creds' found. "));
 
         log.info("Google Credential {} ", credential);
 
@@ -52,22 +49,8 @@ public class GoogleCredentialsSupport {
         return path.toAbsolutePath().toString();
     }
 
-    private static Optional<String> getContentFromEnvProperty() {
-        return Optional.ofNullable(System.getenv("google_creds"));
-    }
-
-    private static String getContentFromSystemProperty() {
-        log.info("ENVIRONMENT variable 'google_creds' is empty, trying java system property 'GOOGLE_APPLICATION_CREDENTIALS'");
-        String google_application_credentials_file = System.getProperty(GOOGLE_APPLICATION_CREDENTIALS);
-        String creds_content = null;
-        try {
-            creds_content = new String(Files.readAllBytes(Paths.get(google_application_credentials_file)));
-        } catch (IOException e) {
-            log.error("Problem registering google creds. Either specify an ENVIRONMENT variable 'google_creds' with the json " +
-                    "representation of the credential or the java system property 'GOOGLE_APPLICATION_CREDENTIALS' which is " +
-                    "a path to a file which contains the json conent");
-        }
-        return creds_content;
+    private static Optional<String> getContentFromJavaSystemProperty() {
+        return Optional.ofNullable(System.getProperty("google_creds"));
     }
 
     /**
@@ -88,5 +71,4 @@ public class GoogleCredentialsSupport {
         }
     }
 
-//    @Value("${spring.rabbitmq.host}")
 }
