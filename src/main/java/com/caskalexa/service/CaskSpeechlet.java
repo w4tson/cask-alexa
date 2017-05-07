@@ -7,7 +7,7 @@ import com.amazon.speech.ui.SimpleCard;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyCustomSpeechlet implements Speechlet {
+public class CaskSpeechlet implements Speechlet {
 
     @Override
     public void onSessionStarted(SessionStartedRequest request, Session session) throws SpeechletException {
