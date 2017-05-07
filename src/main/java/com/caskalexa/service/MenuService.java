@@ -1,11 +1,13 @@
 package com.caskalexa.service;
 
 import com.caskalexa.service.dto.Beer;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,6 +23,7 @@ public class MenuService {
     @Autowired
     GoogleVisionService googleVisionService;
 
+
     public List<Beer> getAllKegs() throws IOException {
         byte[] menuPdfBytes = menuDownloaderService.getMenu();
         byte[] kegsPdfBytes = PdfSupport.cropKegs(menuPdfBytes);
@@ -33,17 +36,83 @@ public class MenuService {
 
         List<String> describedBeers = getAllKegs()
                 .parallelStream()
+                .filter(Beer::isNonRegular)
                 .limit(5)
                 .map(this::describeBeer)
                 .collect(Collectors.toList());
 
-        return describedBeers.stream()
+        return introduction() + describedBeers.stream()
                 .skip(1)
-                .collect(Collectors.joining()) + " And finally, there is " + describedBeers.get(0);
+                .collect(Collectors.joining()) + closingRemark() + describedBeers.get(0);
     }
 
+    private String introduction() {
+        int type = new Random().nextInt(4);
+        String result = StringUtils.EMPTY;
+        switch (type) {
+            case 0:
+                result = "At the Cask today we have: ";
+                break;
+            case 1:
+                result = "Today at cask: ";
+                break;
+            case 2:
+                result = "On the menu today there is: ";
+                break;
+            case 3:
+                result = "Today on the menu:  ";
+                break;
+        }
+        return result;
+    }
+
+    /**
+     *
+     * Describe a beer randomly one of several different ways:
+     *
+     * Edison Electric Bear which is a Czech Style lager
+     * Edison Electric Bear, a Czech Style lager
+     * A Czech Style lager, Edison Electric Bear
+     * A Czech Style lager, by the name of Edison Electric Bear
+     *
+     * @param beer
+     * @return
+     */
     private String describeBeer(Beer beer) {
-        return format("%s, which is a %s. ", beer.getName(), beer.getStyle());
+        int type = new Random().nextInt(4);
+        String result = StringUtils.EMPTY;
+        switch (type) {
+            case 0:
+                result = format("%s, which is a %s. ", beer.getName(), beer.getStyle());
+                break;
+            case 1:
+                result = format("%s, a %s. ", beer.getName(), beer.getStyle());
+                break;
+            case 2:
+                result = format("A %s, %s. ", beer.getStyle(), beer.getName());
+                break;
+            case 3:
+                result = format("A %s, by the name of %s. ", beer.getStyle(), beer.getName());
+                break;
+        }
+        return result;
+    }
+
+    private String closingRemark() {
+        int type = new Random().nextInt(3);
+        String result = StringUtils.EMPTY;
+        switch (type) {
+            case 0:
+                result = " And finally, there is ";
+                break;
+            case 1:
+                result = " As well as ";
+                break;
+            case 2:
+                result = " Lastly there is ";
+                break;
+        }
+        return result;
     }
 
     private List<Beer> convertExtractedKegText(String text) {

@@ -37,10 +37,10 @@ public class CaskSpeechlet implements Speechlet {
 
         if ( intentName.equals("BeersTodayIntent") ) {
 
-            String beersListSpeech = "At the Cask today we have: ";
+            String beersListSpeech;
 
             try {
-                beersListSpeech = beersListSpeech + menuService.topBeersSpeech();
+                beersListSpeech = menuService.topBeersSpeech();
             } catch (IOException e) {
                 PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
                 speech.setText("I'm sorry, I'm having trouble reading the menu!");
