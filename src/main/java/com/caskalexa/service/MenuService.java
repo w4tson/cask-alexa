@@ -1,6 +1,7 @@
 package com.caskalexa.service;
 
 import com.caskalexa.service.dto.Beer;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.lang.String.format;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
-
+@Slf4j
 @Service
 public class MenuService {
 
@@ -23,13 +25,23 @@ public class MenuService {
     @Autowired
     GoogleVisionService googleVisionService;
 
+    List<Beer> cachedBeers;
+
 
     public List<Beer> getAllKegs() throws IOException {
-        byte[] menuPdfBytes = menuDownloaderService.getMenu();
-        byte[] kegsPdfBytes = PdfSupport.cropKegs(menuPdfBytes);
-        byte[] imageOfKegs = PdfSupport.convertPdfToImage(kegsPdfBytes);
-        String extractedText = googleVisionService.getText(imageOfKegs);
-        return convertExtractedKegText(extractedText);
+        List<Beer> beers;
+        if (isNotEmpty(cachedBeers) && menuDownloaderService.isMenuCurrent()) {
+            log.debug(format("Menu unchanged, using %s beers from the cache", cachedBeers.size()));
+            beers = cachedBeers;
+        } else {
+            byte[] menuPdfBytes = menuDownloaderService.getMenu();
+            byte[] kegsPdfBytes = PdfSupport.cropKegs(menuPdfBytes);
+            byte[] imageOfKegs = PdfSupport.convertPdfToImage(kegsPdfBytes);
+            String extractedText = googleVisionService.getText(imageOfKegs);
+            beers = convertExtractedKegText(extractedText);
+        }
+
+        return beers;
     }
 
     public String topBeersSpeech() throws IOException {

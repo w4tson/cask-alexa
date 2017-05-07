@@ -13,14 +13,18 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.FilteredEventListener;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.String.format;
+import static java.util.Objects.isNull;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 @Slf4j
 @Service
@@ -28,12 +32,28 @@ public class MenuDownloaderService {
 
     public static final String MENU_PDF_URL = "http://www.caskpubandkitchen.com/s/Todays-Beerlist.pdf";
 
+    private String lastEtag;
+
     @Autowired
     RestTemplate restTemplate;
 
     public byte[] getMenu() {
         ResponseEntity<byte[]> response = restTemplate.getForEntity(MENU_PDF_URL, byte[].class);
+        List<String> eTags = response.getHeaders().get("ETag");
+        if (isNotEmpty(eTags) && eTags.size() > 0 ) {
+            lastEtag = eTags.get(0);
+        }
         return response.getBody();
+    }
+
+    public boolean isMenuCurrent() {
+        if (isNull(lastEtag)) return false;
+
+        MultiValueMap<String, String> headers  = new HttpHeaders();
+        headers.add("If-None-Match", lastEtag);
+        HttpEntity<?> request = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(MENU_PDF_URL, HttpMethod.HEAD, request, String.class);
+        return response.getStatusCode().equals(HttpStatus.NOT_MODIFIED);
     }
 
     /**
