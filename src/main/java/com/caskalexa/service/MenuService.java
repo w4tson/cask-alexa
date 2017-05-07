@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.lang.String.format;
+
+
 @Service
 public class MenuService {
 
@@ -24,6 +27,23 @@ public class MenuService {
         byte[] imageOfKegs = PdfSupport.convertPdfToImage(kegsPdfBytes);
         String extractedText = googleVisionService.getText(imageOfKegs);
         return convertExtractedKegText(extractedText);
+    }
+
+    public String topBeersSpeech() throws IOException {
+
+        List<String> describedBeers = getAllKegs()
+                .parallelStream()
+                .limit(5)
+                .map(this::describeBeer)
+                .collect(Collectors.toList());
+
+        return describedBeers.stream()
+                .skip(1)
+                .collect(Collectors.joining()) + " And finally, there is " + describedBeers.get(0);
+    }
+
+    private String describeBeer(Beer beer) {
+        return format("%s, which is a %s. ", beer.getName(), beer.getStyle());
     }
 
     private List<Beer> convertExtractedKegText(String text) {

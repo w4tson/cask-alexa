@@ -4,10 +4,16 @@ import com.amazon.speech.slu.Intent;
 import com.amazon.speech.speechlet.*;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.SimpleCard;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class CaskSpeechlet implements Speechlet {
+
+    @Autowired
+    MenuService menuService;
 
     @Override
     public void onSessionStarted(SessionStartedRequest request, Session session) throws SpeechletException {
@@ -29,16 +35,25 @@ public class CaskSpeechlet implements Speechlet {
 
         String intentName = intent.getName();
 
-        if ( intentName.equals("HelloIntent") ) {
+        if ( intentName.equals("BeersTodayIntent") ) {
 
-            String speechText = "Hello, World.  I am a Spring Boot custom skill.";
+            String beersListSpeech = "At the Cask today we have: ";
+
+            try {
+                beersListSpeech = beersListSpeech + menuService.topBeersSpeech();
+            } catch (IOException e) {
+                PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+                speech.setText("I'm sorry, I'm having trouble reading the menu!");
+                SpeechletResponse problemResponse = SpeechletResponse.newTellResponse(speech);
+                return problemResponse;
+            }
 
             SimpleCard card = new SimpleCard();
-            card.setTitle("Hello World");
-            card.setContent(speechText);
+            card.setTitle("Cask Beers");
+            card.setContent(beersListSpeech);
 
             PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-            speech.setText(speechText);
+            speech.setText(beersListSpeech);
 
             SpeechletResponse response = SpeechletResponse.newTellResponse(speech, card);
             return response;

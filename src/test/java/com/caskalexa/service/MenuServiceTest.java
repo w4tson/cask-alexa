@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class MenuServiceTest {
 
+
     public static final String CASK_MENU_PDF = "src/test/resources/cask-menu.pdf";
 
     @InjectMocks
@@ -57,5 +58,18 @@ public class MenuServiceTest {
 
         List<Beer> allKegs = menuService.getAllKegs();
         assertThat(allKegs).hasSize(15);
+    }
+
+    @Test
+    public void topBeersSpeech() throws Exception {
+        String extractedText = Files.readAllLines(Paths.get("src/test/resources/extract-text.txt"))
+                .stream()
+                .collect(Collectors.joining("\n"));
+
+        when(menuDownloaderService.getMenu()).thenReturn(pdfData);
+        when(googleVisionService.getText(any())).thenReturn(extractedText);
+
+        String result = menuService.topBeersSpeech();
+        System.out.println(result);
     }
 }
