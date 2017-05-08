@@ -13,7 +13,8 @@ import java.io.IOException;
 @Service
 public class CaskSpeechlet implements Speechlet {
 
-    public static final String INTRO = "Find out more about drinks by asking: what is on?";
+    public static final String INTRO = "Welcome to Cask Beers. ";
+    public static final String HOW_TO = "Find out more about drinks by asking: what is on?";
 
     @Autowired
     MenuService menuService;
@@ -25,9 +26,11 @@ public class CaskSpeechlet implements Speechlet {
     @Override
     public SpeechletResponse onLaunch(LaunchRequest request, Session session) throws SpeechletException {
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-        speech.setText(INTRO);
+        speech.setText(INTRO + HOW_TO);
         Reprompt reprompt = new Reprompt();
-        reprompt.setOutputSpeech(speech);
+        PlainTextOutputSpeech repromptSpeech = new PlainTextOutputSpeech();
+        repromptSpeech.setText(HOW_TO);
+        reprompt.setOutputSpeech(repromptSpeech);
         return SpeechletResponse.newAskResponse(speech, reprompt);
     }
 
