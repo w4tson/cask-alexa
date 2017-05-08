@@ -1,4 +1,4 @@
-package com.caskalexa;
+package com.caskalexa.config;
 
 import com.amazon.speech.speechlet.servlet.SpeechletServlet;
 import com.caskalexa.service.CaskSpeechlet;

@@ -3,6 +3,7 @@ package com.caskalexa.service;
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.speechlet.*;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
+import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import java.io.IOException;
 
 @Service
 public class CaskSpeechlet implements Speechlet {
+
+    public static final String INTRO = "Find out more about drinks by asking: what is on?";
 
     @Autowired
     MenuService menuService;
@@ -22,8 +25,10 @@ public class CaskSpeechlet implements Speechlet {
     @Override
     public SpeechletResponse onLaunch(LaunchRequest request, Session session) throws SpeechletException {
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-        speech.setText("yo yo yo");
-        return SpeechletResponse.newTellResponse(speech);
+        speech.setText(INTRO);
+        Reprompt reprompt = new Reprompt();
+        reprompt.setOutputSpeech(speech);
+        return SpeechletResponse.newAskResponse(speech, reprompt);
     }
 
     @Override
