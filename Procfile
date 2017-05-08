@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -Dgoogle_creds="$google_creds" -javaagent:build/libs/newrelic.jar  -jar build/libs/cask-alexa.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -Dgoogle_creds="$google_creds" -javaagent:build/lib/newrelic.jar  -jar build/libs/cask-alexa.jar
