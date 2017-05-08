@@ -1,3 +1,6 @@
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
 buildscript { scriptHandler ->
     apply from: "${rootDir}/gradle/repositories.gradle", to: scriptHandler
 
@@ -6,6 +9,7 @@ buildscript { scriptHandler ->
         springDependencyPluginVersion = '0.5.4.RELEASE'
         itextpdfVersion = '7.0.2'
         lombokVersion = ''
+        newrelicVersion = '3.12.1'
     }
 
     dependencies {
@@ -34,6 +38,10 @@ dependencyManagement {
 
 apply from: "${rootDir}/gradle/repositories.gradle"
 
+configurations {
+    newrelic
+}
+
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-logging'
     compile 'org.springframework.boot:spring-boot-starter-hateoas'
@@ -57,6 +65,8 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'junit:junit:4.12'
     testRuntime 'com.h2database:h2'
+
+    newrelic "com.newrelic.agent.java:newrelic-agent:${newrelicVersion}"
 }
 
 bootRun {
@@ -67,6 +77,8 @@ bootRun {
 springBoot  {
     buildInfo()
     executable = true
+    mainClass = 'com.caskalexa.CaskAlexaMain'
+    agent = file("$buildDir/lib/newrelic.jar")
 }
 
 idea {
@@ -79,5 +91,20 @@ idea {
 test {
     environment "GOOGLE_APPLICATION_CREDENTIALS", System.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 }
+
+task copyNewrelic(type: Copy) {
+
+    from(configurations.newrelic) {
+        rename ("newrelic-agent-${newrelicVersion}.jar", 'newrelic.jar')
+    }
+
+    from('src/main/resources/newrelic.yml') {
+        filter(ReplaceTokens, tokens: ['NEWRELIC_LICENSE': System.getenv('NEWRELIC_LICENSE')], beginToken : '${', endToken : '}')
+    }
+
+    into "$buildDir/lib"
+
+}
+project.tasks.jar.dependsOn([copyNewrelic])
 
 
