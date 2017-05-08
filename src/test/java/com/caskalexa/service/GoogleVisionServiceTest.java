@@ -1,6 +1,7 @@
 package com.caskalexa.service;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,7 +25,8 @@ public class GoogleVisionServiceTest {
     }
 
     @Test
-    public void test() throws Exception {
+    @Ignore
+    public void testGoogleVision() throws Exception {
 
         byte[] bytes = pdfSupport.cropKegs(pdfData);
         byte[] croppedImage = pdfSupport.convertPdfToImage(bytes);

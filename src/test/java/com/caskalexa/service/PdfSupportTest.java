@@ -45,14 +45,6 @@ public class PdfSupportTest {
     }
 
     @Test
-    public void name() throws Exception {
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(pdfData);
-        PDFParser parser = new PDFParser(new RandomAccessBufferedFileInputStream(byteArrayInputStream));
-//        parser.getPDDocument().getPage(1).
-
-    }
-
-    @Test
     public void testCrop() throws Exception {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(pdfData);
 
@@ -69,7 +61,7 @@ public class PdfSupportTest {
     }
 
     @Test
-    public void testCrop2() throws Exception {
+    public void testCropAndConvertToImage() throws Exception {
 
         byte[] bytes = pdfSupport.cropKegs(pdfData);
         byte[] croppedImage = pdfSupport.convertPdfToImage(bytes);
@@ -81,8 +73,6 @@ public class PdfSupportTest {
         fileOutputStream.write(croppedImage);
         fileOutputStream.flush();
         fileOutputStream.close();
-
-
     }
 
 }
