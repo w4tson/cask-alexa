@@ -19,6 +19,7 @@ public class CaskSpeechlet implements Speechlet {
     public static final String AMAZON_STOP_INTENT = "AMAZON.StopIntent";
     public static final String AMAZON_CANCEL_INTENT = "AMAZON.CancelIntent";
     public static final String HELP_SPEECH = "Cask Beers can tell you more information about the daily beer menu. You can cask for me info by asking: What is on the menu?";
+    public static final String HELP_REPROMPT = "You can ask for me info by asking: What is on the menu?";
 
     @Autowired
     MenuService menuService;
@@ -29,13 +30,7 @@ public class CaskSpeechlet implements Speechlet {
 
     @Override
     public SpeechletResponse onLaunch(LaunchRequest request, Session session) throws SpeechletException {
-        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-        speech.setText(INTRO + HOW_TO);
-        Reprompt reprompt = new Reprompt();
-        PlainTextOutputSpeech repromptSpeech = new PlainTextOutputSpeech();
-        repromptSpeech.setText(HOW_TO);
-        reprompt.setOutputSpeech(repromptSpeech);
-        return SpeechletResponse.newAskResponse(speech, reprompt);
+        return ask(INTRO + HOW_TO, HOW_TO);
     }
 
     @Override
@@ -67,7 +62,7 @@ public class CaskSpeechlet implements Speechlet {
             SpeechletResponse response = SpeechletResponse.newTellResponse(speech, card);
             return response;
         } else if (intentName.equals(AMAZON_HELP_INTENT)){
-            return ask(HELP_SPEECH);
+            return ask(HELP_SPEECH, HELP_REPROMPT);
         } else if (intentName.equals(AMAZON_CANCEL_INTENT) || intentName.equals(AMAZON_STOP_INTENT)) {
             return new SpeechletResponse();
         }
@@ -87,9 +82,13 @@ public class CaskSpeechlet implements Speechlet {
         return SpeechletResponse.newTellResponse(speech);
     }
 
-    private SpeechletResponse ask(String text) {
+    private SpeechletResponse ask(String text, String repromptText) {
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(text);
-        return SpeechletResponse.newTellResponse(speech);
+        Reprompt reprompt = new Reprompt();
+        PlainTextOutputSpeech repromptSpeech = new PlainTextOutputSpeech();
+        repromptSpeech.setText(repromptText);
+        reprompt.setOutputSpeech(repromptSpeech);
+        return SpeechletResponse.newAskResponse(speech, reprompt);
     }
 }
