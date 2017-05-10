@@ -5,11 +5,13 @@ import com.amazon.speech.speechlet.*;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+@Slf4j
 @Service
 public class CaskSpeechlet implements Speechlet {
 
@@ -18,7 +20,7 @@ public class CaskSpeechlet implements Speechlet {
     public static final String AMAZON_HELP_INTENT = "AMAZON.HelpIntent";
     public static final String AMAZON_STOP_INTENT = "AMAZON.StopIntent";
     public static final String AMAZON_CANCEL_INTENT = "AMAZON.CancelIntent";
-    public static final String HELP_SPEECH = "Cask Beers can tell you more information about the daily beer menu. You can cask for me info by asking: What is on the menu?";
+    public static final String HELP_SPEECH = "Cask Beers can tell you more information about the daily beer menu. You can ask for me info by asking: What is on the menu?";
     public static final String HELP_REPROMPT = "You can ask for me info by asking: What is on the menu?";
 
     @Autowired
@@ -30,11 +32,14 @@ public class CaskSpeechlet implements Speechlet {
 
     @Override
     public SpeechletResponse onLaunch(LaunchRequest request, Session session) throws SpeechletException {
+        log.info("User {} opened Cask Beers app", session.getUser().getUserId());
         return ask(INTRO + HOW_TO, HOW_TO);
     }
 
     @Override
     public SpeechletResponse onIntent(IntentRequest request, Session session) throws SpeechletException {
+
+
 
         Intent intent = request.getIntent();
         if (intent == null)
@@ -64,7 +69,10 @@ public class CaskSpeechlet implements Speechlet {
         } else if (intentName.equals(AMAZON_HELP_INTENT)){
             return ask(HELP_SPEECH, HELP_REPROMPT);
         } else if (intentName.equals(AMAZON_CANCEL_INTENT) || intentName.equals(AMAZON_STOP_INTENT)) {
-            return new SpeechletResponse();
+            SpeechletResponse halt = new SpeechletResponse();
+            halt.setShouldEndSession(true);
+
+            return halt;
         }
         else {
             throw new SpeechletException("I don't understand that intent.");
