@@ -22,9 +22,10 @@ public class CaskSpeechlet implements Speechlet {
     public static final String AMAZON_CANCEL_INTENT = "AMAZON.CancelIntent";
     public static final String HELP_SPEECH = "Cask Beers can tell you more information about the daily beer menu. You can ask for me info by asking: What is on the menu?";
     public static final String HELP_REPROMPT = "You can ask for me info by asking: What is on the menu?";
+    public static final String BEERS_TODAY_INTENT = "BeersTodayIntent";
 
     @Autowired
-    MenuService menuService;
+    private MenuService menuService;
 
     @Override
     public void onSessionStarted(SessionStartedRequest request, Session session) throws SpeechletException {
@@ -39,43 +40,39 @@ public class CaskSpeechlet implements Speechlet {
     @Override
     public SpeechletResponse onIntent(IntentRequest request, Session session) throws SpeechletException {
 
-
-
         Intent intent = request.getIntent();
         if (intent == null)
             throw new SpeechletException("Unrecognized intent");
 
         String intentName = intent.getName();
 
-        if ( intentName.equals("BeersTodayIntent") ) {
+        switch (intentName) {
+            case BEERS_TODAY_INTENT:
 
-            String beersListSpeech;
+                String beersListSpeech;
 
-            try {
-                beersListSpeech = menuService.topBeersSpeech();
-            } catch (IOException e) {
-                return respond("I'm sorry, I'm having trouble reading the menu!");
-            }
+                try {
+                    beersListSpeech = menuService.topBeersSpeech();
+                } catch (IOException e) {
+                    return respond("I'm sorry, I'm having trouble reading the menu!");
+                }
 
-            SimpleCard card = new SimpleCard();
-            card.setTitle("Cask Beers");
-            card.setContent(beersListSpeech);
+                SimpleCard card = new SimpleCard();
+                card.setTitle("Cask Beers");
+                card.setContent(beersListSpeech);
 
-            PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-            speech.setText(beersListSpeech);
+                PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+                speech.setText(beersListSpeech);
 
-            SpeechletResponse response = SpeechletResponse.newTellResponse(speech, card);
-            return response;
-        } else if (intentName.equals(AMAZON_HELP_INTENT)){
-            return ask(HELP_SPEECH, HELP_REPROMPT);
-        } else if (intentName.equals(AMAZON_CANCEL_INTENT) || intentName.equals(AMAZON_STOP_INTENT)) {
-            SpeechletResponse halt = new SpeechletResponse();
-            halt.setShouldEndSession(true);
-
-            return halt;
-        }
-        else {
-            throw new SpeechletException("I don't understand that intent.");
+                SpeechletResponse response = SpeechletResponse.newTellResponse(speech, card);
+                return response;
+            case AMAZON_HELP_INTENT:
+                return ask(HELP_SPEECH, HELP_REPROMPT);
+            case AMAZON_CANCEL_INTENT:
+            case AMAZON_STOP_INTENT:
+                return new SpeechletResponse();
+            default:
+                throw new SpeechletException("I don't understand that intent.");
         }
     }
 
