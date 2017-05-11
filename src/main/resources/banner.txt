@@ -1,0 +1,43 @@
+${AnsiColor.RED}     ,gggg,  ${AnsiColor.BRIGHT_CYAN}                                            ,ggg,
+${AnsiColor.RED}   ,88"""Y8b,${AnsiColor.BRIGHT_CYAN}                      ,dPYb,               dP""8I   ,dPYb,
+${AnsiColor.RED}  d8"     `Y8${AnsiColor.BRIGHT_CYAN}                      IP'`Yb              dP   88   IP'`Yb
+${AnsiColor.RED} d8'   8b  d8${AnsiColor.BRIGHT_CYAN}                      I8  8I             dP    88   I8  8I
+${AnsiColor.RED},8I    "Y88P'${AnsiColor.BRIGHT_CYAN}                      I8  8bgg,         ,8'    88   I8  8'
+${AnsiColor.RED}I8'          ${AnsiColor.BRIGHT_CYAN}  ,gggg,gg    ,g,     I8 dP" "8         d88888888   I8 dP   ,ggg,      ,gg,   ,gg  ,gggg,gg
+${AnsiColor.RED}d8           ${AnsiColor.BRIGHT_CYAN} dP"  "Y8I   ,8'8,    I8d8bggP"   __   ,8"     88   I8dP   i8" "8i    d8""8b,dP"  dP"  "Y8I
+${AnsiColor.RED}Y8,          ${AnsiColor.BRIGHT_CYAN}i8'    ,8I  ,8'  Yb   I8P' "Yb,  dP"  ,8P      Y8   I8P    I8, ,8I   dP   ,88"   i8'    ,8I
+${AnsiColor.RED}`Yba,,_____,,${AnsiColor.BRIGHT_CYAN}d8,   ,d8b,,8'_   8) ,d8    `Yb, Yb,_,dP       `8b,,d8b,_  `YbadP' ,dP  ,dP"Y8, ,d8,   ,d8b,
+${AnsiColor.RED}  `"Y8888888P${AnsiColor.BRIGHT_CYAN}"Y8888P"`Y8P' "YY8P8P88P      Y8  "Y8P"         `Y88P'"Y88888P"Y8888"  dP"   "Y8P"Y8888P"`Y8
+
+${AnsiColor.WHITE}
+
+                                      ```...---:::::---....```
+                              ``.-:+ossyshydydhhhhhyhyhshsyos+o+/:-.``
+                          `.:+syhdhdhhhhhhhhhhhhhhhyyyyssssssssoyoyoo++:-`
+                      `./oyhdddhhhhhhhhhhhhhhhyhhyyhhhhyssssssooooooossyso+:.`
+                    `:shddddhhhhhhhhhhhhhhhhhyyysssyyyyysssssssoooooooooossss+:.
+                  `/ydddddhhhhhhhhhhhhhhhhhhhhhyyyyyyyyysssssssoooooooooooosssso/.
+                 -ohdddddhhhhhhhhhhhhhhhhhhhhhhhyyyyyyyyysssssssosooooooooooosyyoo-
+                -ohdddddhhhdhdhyhddhhhhhhhhhhhhhyyyyyyyyysssssssssyyyyysssoooosysoo-
+                +ydddddhhhhhhyo-+yhhhhhhhhhhhhhhyhhyyyyyyyssssysooos+ssssssooooyyss+`
+               `+ydmddhhhhhhhyssyhhhhhhhhhhhhhhhhyyyyyyyyyyssssssooooooossooosshhss+`
+                /+hdmdhhhhhhhhhhhhhhhhhhhhhhhhhhhhyyyyyyyyyyysssssssssssssssssyhys+/
+                :/+yhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyyyyyyyyyssssssssssssssshhys++/
+                :o++oyhddhhhhhhhhhhhhhhhhhhhhhhhhhdddddhyyyyyyyyysssssssssyhhysooss/
+                -oyyo+osydddhhhhhhhhhhhhhhhhhyyysyyyhhhdyyyyyyyyyyyyysyyhhhssooshds:
+                .oyhhysooooshhdhdhhhhhhhhhhhhhyyyyyyyhhyyyyyyyyyyyyhyhyyssssyyydmhs-
+                .+yhhhssssoo+//+osyydydhdhhhhhhhhhhhhhhyhhhhydyhyysoooosyhhdddyddhs.
+                `+shhhsssssyhyys+/:--://++oosysysyysysysoo++//:::/+syhdmmdddddhddhs.
+                `+shhhsssssyhhdddmmmdhyssoo+++////////+++oosyhhmmNNNNmmmmddddhhddhs`
+                 +shhhyssssyhhddmmNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNmmmmdddddhhddhs
+                 /shhhyssssyhhddmmNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNmmmmdddddddmdh+
+                 `shddyssssyhhdddmNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNmmmmdddddddmdy.
+                  .yddyssssyhhdddmNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNmmmmdddmmddmh-
+                   `ohhssssyhhdddmNNNNN                      NNNNNNNmmmmmddmmdds.
+                     -osssyyhdddmmNNNNNN       AMAZON        NNNNNNNNmmmmmdmmds-
+                       .:osyhdddmmNNNNNNNN               NNNNNNNNNNNmmmmmdy+.
+                          .:+shddmmNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNmmdhs/.`
+                             `.-/oyhdmNNNNNNNNNNNNNMMMMMMMMMMNNmdhs+:.`
+                                   `.-:/+osyhhddddddddhhyso+/:-.`
+                                                ```
+

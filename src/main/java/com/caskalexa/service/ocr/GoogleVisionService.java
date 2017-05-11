@@ -1,4 +1,4 @@
-package com.caskalexa.service;
+package com.caskalexa.service.ocr;
 
 import com.google.cloud.vision.spi.v1.ImageAnnotatorClient;
 import com.google.cloud.vision.v1.*;

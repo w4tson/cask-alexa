@@ -72,7 +72,7 @@ dependencies {
 
 bootRun {
     addResources = true
-    jvmArgs = [ "-Dgoogle_creds=\"${System.getenv('google_creds')}\"" ]
+    jvmArgs = [ "-Dgoogle_creds=${System.getenv('google_creds')}" ]
 }
 
 springBoot  {

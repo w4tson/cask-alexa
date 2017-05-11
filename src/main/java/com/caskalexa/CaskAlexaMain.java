@@ -1,6 +1,6 @@
 package com.caskalexa;
 
-import com.caskalexa.GoogleCredentialsSupport;
+import com.caskalexa.service.ocr.GoogleCredentialsSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

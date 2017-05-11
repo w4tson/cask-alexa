@@ -1,5 +1,6 @@
 package com.caskalexa.service;
 
+import com.caskalexa.service.ocr.GoogleVisionService;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;

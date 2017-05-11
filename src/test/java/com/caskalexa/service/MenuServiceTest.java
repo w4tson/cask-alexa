@@ -1,6 +1,7 @@
 package com.caskalexa.service;
 
 import com.caskalexa.service.dto.Beer;
+import com.caskalexa.service.ocr.GoogleVisionService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

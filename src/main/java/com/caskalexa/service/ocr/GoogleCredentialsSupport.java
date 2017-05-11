@@ -1,4 +1,4 @@
-package com.caskalexa;
+package com.caskalexa.service.ocr;
 
 import lombok.extern.slf4j.Slf4j;
 
