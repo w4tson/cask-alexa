@@ -49,7 +49,7 @@ public class MenuService {
     public String topBeersSpeech() throws IOException {
 
         List<String> describedBeers = getAllKegs()
-                .parallelStream()
+                .stream()
                 .filter(Beer::isNonRegular)
                 .limit(5)
                 .map(this::describeBeer)
