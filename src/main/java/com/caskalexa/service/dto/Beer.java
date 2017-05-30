@@ -12,7 +12,7 @@ public class Beer {
     private String name;
     private String style;
 
-    public static final String[] regulars = {"Pheasant Plucker", "Wheat Rothaus", "Pils Rothaus"};
+    public static final String[] regulars = {"Pheasant Plucker", "Wheat Rothaus", "Pils Rothaus", "Tzara Thornbridge"};
 
     public boolean isNonRegular() {
         return !Stream.of(regulars)

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,7 +28,6 @@ public class MenuService {
     GoogleVisionService googleVisionService;
 
     List<Beer> cachedBeers;
-
 
     public List<Beer> getAllKegs() throws IOException {
         List<Beer> beers;
@@ -139,8 +139,27 @@ public class MenuService {
                 .mapToObj(i -> {
                     return  new Beer("Keg", lines[i * 2], lines[i * 2 + 1]);
                 })
+                .map(this::correctAnomolies)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * There are some quirks when converting pdf to text and then text to beer structure
+     * This method tidyies up things like when google thinks IPA in italics actually is a slash e.g.  /PA
+     * @param beer the Beer to be corrected
+     * @return the same beer object but with any anomolies corrected
+     */
+    private Beer correctAnomolies(Beer beer) {
+        if (Objects.equals(beer.getStyle(), "/PA")) {
+            beer.setStyle("I.P.A");
+        }
+        if (beer.getStyle().contains("IPA")) {
+            beer.setStyle(beer.getStyle().replace("IPA", "I.P.A"));
+        }
+        if (beer.getStyle().contains("/mperial")) {
+            beer.setStyle(beer.getStyle().replace("/mperial", "Imperial"));
+        }
 
+        return beer;
+    }
 }
