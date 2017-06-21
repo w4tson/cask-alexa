@@ -30,7 +30,7 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 @Service
 public class MenuDownloaderService {
 
-    public static final String MENU_PDF_URL = "http://www.caskpubandkitchen.com/s/Todays-Beerlist-1.pdf";
+    public static final String MENU_PDF_URL = "http://www.caskpubandkitchen.com/s/Todays-Beerlist.pdf";
 
     private String lastEtag;
 
